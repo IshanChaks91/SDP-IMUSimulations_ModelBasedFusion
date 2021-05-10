@@ -1,0 +1,76 @@
+Step 1. Directory has to be organized as illustrated in dir_structure_1.png over the course of the installation procedure
+
+Step 2. Open command line inside user_directory and clone bullet3, sim2b, fil2b, microblx, uutils, liblfds6.1.1
+
+	>> git clone https://github.com/bulletphysics/bullet3.git
+ 	>> git clone https://github.com/HBRS-SDP/sdp_ws20_filt2b.git
+	>> git clone https://github.com/rosym-project/sim2b.git
+ 	>> git clone -b dev https://github.com/kmarkus/microblx.git
+ 	>> git clone https://github.com/kmarkus/uutils.git
+ 	>> git clone https://github.com/liblfds/liblfds6.1.1.git
+
+Step 3. Make a folder inside user_directory called install
+
+	a. Make a folder inside install called bullet3
+	b. Make a folder inside install called sim2b
+	c. Make a folder inside install called uutils
+	d. Make a folder inside install called liblfds
+	e. Make a folder inside install called microblx
+	
+Step 4. Navigate to ../user_directory/bullet3 and open a terminal here
+
+	>> mkdir build
+	>> cd build
+	>> cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE -DCMAKE_INSTALL_RPATH=/home/user_name/..../user_directory/install/bullet3/lib -DCMAKE_INSTALL_PREFIX=/home/user_name/.../user_directory/install/bullet3 ..
+	>> make (or else [ >> make -j x ], where x is the number of virtual cores your computer has, for faster processing...)
+	>> make install
+	
+	Now ../user_directory/install/bullet3 should have two folders lib and include
+	
+	Copy the env.sh file in ../user_directory, modify the file paths in each line to reflect the proper destinations of /install/.. and open a terminal here
+	
+	>> source env.sh
+	
+Step 5. Navigate to ../user_directory and open terminal here
+
+	>> cd uutils
+	>> make DESTDIR=/home/user_name/..../user_directory/install/uutils install
+	
+Step 6. Navigate to ../user_directory and open terminal here
+
+	>> cd liblfds6.1.1
+	>> git am ../microblx/liblfds/*.patch
+	>> ./bootstrap
+	>> ./configure --prefix=/home/user_name/..../user_directory/install/liblfds
+	>> make
+	>> make install
+	
+Step 7. Navigate to ../user_directory and open terminal here
+
+	>> cd microblx
+	>> ./bootstrap
+	>> ./configure --disable-cpp-demo --prefix=/home/user_name/..../user_directory/install/microblx
+	>> make
+	>> make install
+	
+Step 8. Test bullet is working by navigating to /user_directory/bullet3/examples/pybullet/gym/pybullet_envs/examples/ and opening terminal here
+
+	>> python3 -m minitaur_gym_env_example
+	
+Step 9. Navigate to ../user_directory/sim2b/srv/nbx and open bullet.cpp in a text editor
+
+	a. replace the second line, [ #include <b3RobotSimulatorClientAPI_NoGUI.h> ], with [ #include <SharedMemory/b3RobotSimulatorClientAPI_NoGUI.h> ] and save the file
+	
+Step 10. Navigate to ../user_directory/sim2b and open a terminal here
+	
+	>> mkdir build
+	>> cd build
+	>> export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/home/user_name/.../user_directoy/install/bullet3/lib/pkgconfig
+	>> cmake -DENABLE_BULLET=On ..
+	>> make VERBOSE=1
+	
+Step 11. Test sim2b setup by navigating to ../user_directory/sim2b/build/src/example and verifying bullet file exists, and open a terminal here
+
+	>> ./bullet
+	
+	The file to print out an output on the command line interface 
