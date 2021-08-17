@@ -1,0 +1,6 @@
+Name: bullet_robotics_gui
+Description: Bullet GUI extras for robotics
+Requires: bullet
+Version: 3.17
+Libs: -L/home/deji/user_directory/install/bullet3/lib -lBulletRoboticsGUI
+Cflags:  -I/home/deji/user_directory/install/bullet3/include/bullet -I/home/deji/user_directory/install/bullet3/include/bullet_robotics_gui
